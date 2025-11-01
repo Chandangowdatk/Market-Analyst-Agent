@@ -147,15 +147,65 @@ async def upload_document(file: UploadFile = File(...)):
     """
     Upload and process a new market research document.
     
+    Supports: .txt and .pdf files
+    
     This will:
-    1. Process the document into chunks
-    2. Generate embeddings
-    3. Store in Pinecone vector database
+    1. Extract text from document (TXT or PDF)
+    2. Process the document into chunks
+    3. Generate embeddings
+    4. Store in Pinecone vector database
     """
     try:
         # Read file content
         content = await file.read()
-        text = content.decode('utf-8')
+        
+        # Extract text based on file type
+        filename_lower = file.filename.lower()
+        
+        if filename_lower.endswith('.pdf'):
+            # Handle PDF files
+            try:
+                from pypdf import PdfReader
+                from io import BytesIO
+                
+                pdf_file = BytesIO(content)
+                pdf_reader = PdfReader(pdf_file)
+                
+                # Extract text from all pages
+                text_parts = []
+                for page_num, page in enumerate(pdf_reader.pages, 1):
+                    page_text = page.extract_text()
+                    if page_text.strip():
+                        text_parts.append(page_text)
+                
+                text = "\n\n".join(text_parts)
+                
+                if not text.strip():
+                    raise HTTPException(
+                        status_code=400,
+                        detail="PDF appears to be empty or contains only images. Please upload a PDF with extractable text."
+                    )
+                    
+            except Exception as pdf_error:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Failed to process PDF: {str(pdf_error)}. Ensure the PDF is not password-protected or corrupted."
+                )
+                
+        elif filename_lower.endswith('.txt'):
+            # Handle text files
+            try:
+                text = content.decode('utf-8')
+            except UnicodeDecodeError:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Invalid text file encoding. Please ensure the file is UTF-8 encoded."
+                )
+        else:
+            raise HTTPException(
+                status_code=400,
+                detail="Unsupported file format. Please upload a .txt or .pdf file."
+            )
         
         # Process document
         documents = document_processor.process_document(
@@ -172,16 +222,14 @@ async def upload_document(file: UploadFile = File(...)):
         return {
             "message": "Document processed successfully",
             "filename": file.filename,
+            "file_type": "PDF" if filename_lower.endswith('.pdf') else "TXT",
             "chunks_created": len(documents),
             "namespace": Config.PINECONE_NAMESPACE,
             "status": "success"
         }
         
-    except UnicodeDecodeError:
-        raise HTTPException(
-            status_code=400,
-            detail="Invalid file format. Please upload a text file."
-        )
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(
             status_code=500,

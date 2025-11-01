@@ -106,7 +106,7 @@ The UI will be available at `http://localhost:3000`
 
 ### 1. Upload Documents
 
-Click the **"+"** icon or **"Upload Document"** chip to upload a `.txt` market research document. The system will:
+Click the **"+"** icon or **"Upload Document"** chip to upload a `.txt` or `.pdf` market research document. The system will:
 - Process the document into semantic chunks
 - Generate embeddings using `all-MiniLM-L12-v2`
 - Store vectors in Pinecone
@@ -182,10 +182,13 @@ Market_Analyst_Agent/
 ## 🔑 API Endpoints
 
 ### `POST /api/upload`
-Upload and process a document
+Upload and process a document (supports .txt and .pdf)
 ```bash
 curl -X POST http://localhost:8000/api/upload \
   -F "file=@document.txt"
+# or
+curl -X POST http://localhost:8000/api/upload \
+  -F "file=@document.pdf"
 ```
 
 ### `POST /api/query`

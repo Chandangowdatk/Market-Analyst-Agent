@@ -279,7 +279,7 @@ function App() {
                 <input
                   ref={fileInputRef}
                   type="file"
-                  accept=".txt"
+                  accept=".txt,.pdf"
                   onChange={handleFileUpload}
                   style={{ display: 'none' }}
                 />
@@ -549,7 +549,7 @@ function App() {
                 <input
                   ref={fileInputRef}
                   type="file"
-                  accept=".txt"
+                  accept=".txt,.pdf"
                   onChange={handleFileUpload}
                   style={{ display: 'none' }}
                 />
