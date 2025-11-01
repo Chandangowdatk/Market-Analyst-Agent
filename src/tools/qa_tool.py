@@ -36,25 +36,28 @@ llm = ChatGoogleGenerativeAI(
 @tool
 def qa_tool(query: str) -> str:
     """
-    Answer specific FACTUAL questions about the Innovate Inc. market research report.
+    Answer QUICK, FACTUAL questions about market research documents. Provides concise, direct answers.
     
     Use this tool for:
-    - Questions starting with What, When, Who, Which, How many
-    - Specific data lookups (market share, growth rates, competitors)
-    - Company information queries
-    - SWOT analysis questions
+    - Simple factual lookups (product names, competitors, metrics)
+    - SWOT items (strengths, weaknesses, opportunities, threats)
+    - Company information (market share, growth rates, financials)
+    - Direct "what is X" or "who are Y" queries
     
     Examples:
-    - "What is Innovate Inc's current market share?"
-    - "Who are the main competitors?"
-    - "What are the company's weaknesses?"
-    - "How much is the market projected to grow?"
+    - "What is the flagship product?"
+    - "Who are the competitors?"
+    - "What are the SWOTs?" or "List the strengths"
+    - "What is the market size?"
+    - "How many competitors are there?"
+    
+    NOTE: For deep strategic analysis or comprehensive summaries, use insights_tool instead.
     
     Args:
         query: The factual question to answer from the report
         
     Returns:
-        Answer with source citations from the report
+        Concise answer with source citations
     """
     try:
         # Retrieve relevant documents (LangChain 1.0 uses .invoke() instead of .get_relevant_documents())
@@ -73,7 +76,15 @@ def qa_tool(query: str) -> str:
         if not source_docs:
             return "No relevant documents found in the vector database. Please upload a .txt file first via the upload endpoint."
 
-        context = "\n\n".join(doc.page_content for doc in source_docs)
+        # Clean and prepare context (remove extra spaces from PDF extraction)
+        import re
+        cleaned_docs = []
+        for doc in source_docs:
+            # Replace multiple spaces with single space
+            cleaned_text = re.sub(r'\s+', ' ', doc.page_content)
+            cleaned_docs.append(cleaned_text)
+        
+        context = "\n\n".join(cleaned_docs)
 
         # Check if context is empty
         if not context.strip():
@@ -81,7 +92,7 @@ def qa_tool(query: str) -> str:
 
         # Build prompt template (proper messages format for Gemini)
         qa_prompt = ChatPromptTemplate.from_messages([
-            ("system", "You are a helpful analyst. Use the provided context to answer the question concisely. If the answer cannot be found in the context, say you don't know."),
+            ("system", "You are a helpful market research analyst. Answer the question based on the provided context. Be direct and specific. Extract exact information from the context when available."),
             ("human", "Context:\n{context}\n\nQuestion: {query}")
         ])
 

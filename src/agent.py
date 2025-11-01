@@ -46,17 +46,28 @@ Your capabilities:
 3. **Extract Tool**: Export structured data in JSON format
 
 Instructions for tool selection:
-- Use **qa_tool** for specific factual questions (What/Who/When/Which/How many)
-- Use **insights_tool** for summaries, analysis, overviews, or strategic insights
-- Use **extract_tool** when user asks for JSON, structured data, or data export
+- Use **qa_tool** for:
+  * Simple factual questions (What/Who/When/Which/How many)
+  * Quick lookups (product names, competitors, metrics, SWOT items)
+  * Direct information retrieval (e.g., "what is X", "who are the competitors", "what are the SWOTs")
+  
+- Use **insights_tool** for:
+  * Deep strategic analysis and recommendations
+  * Multi-faceted summaries requiring interpretation
+  * Requests explicitly asking for "analysis", "strategy", "recommendations"
+  * Comprehensive overviews (e.g., "analyze the market position", "provide strategic recommendations")
+  
+- Use **extract_tool** when user asks for:
+  * JSON format output
+  * Structured data export
+  * Complete data extraction in schema format
 
 Always:
 - Select the most appropriate tool based on the query intent
+- Default to qa_tool for simple, direct questions
+- Use insights_tool only when deep analysis is explicitly requested
 - Provide clear, concise responses
-- Cite sources when using qa_tool
-- Be helpful and professional
-
-If the query is ambiguous, ask for clarification before selecting a tool."""
+- Be helpful and professional"""
 
     # Create agent with modern API - much simpler!
     # No AgentExecutor wrapper needed, no prompt template needed

@@ -96,8 +96,10 @@ Please provide comprehensive strategic insights addressing this request:""")
         if not source_docs:
             return "No documents found in the vector database. Please upload a .txt file first via the upload endpoint."
         
+        # Clean PDF extraction artifacts (extra spaces)
+        import re
         document_context = "\n\n".join([
-            f"Section: {doc.metadata.get('section', 'Unknown')}\n{doc.page_content}"
+            f"Section: {doc.metadata.get('section', 'Unknown')}\n{re.sub(r' +', ' ', doc.page_content)}"
             for doc in source_docs
         ])
         

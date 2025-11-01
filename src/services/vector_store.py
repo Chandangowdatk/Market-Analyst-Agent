@@ -112,14 +112,12 @@ class VectorStoreManager:
                 search_kwargs={"k": k}
             )
         
-        # Otherwise use threshold (use provided value, or default from config)
-        threshold = score_threshold if score_threshold is not None else Config.RELEVANCE_THRESHOLD
-        
+        # Otherwise use the provided threshold (guaranteed to be not None here)
         return self.vector_store.as_retriever(
             search_type="similarity_score_threshold",
             search_kwargs={
                 "k": k,
-                "score_threshold": threshold
+                "score_threshold": score_threshold
             }
         )
     

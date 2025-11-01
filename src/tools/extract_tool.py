@@ -131,8 +131,10 @@ DO NOT:
                 "message": "Please upload a .txt file first via the upload endpoint."
             }, indent=2)
         
+        # Clean PDF extraction artifacts (extra spaces)
+        import re
         document_context = "\n\n".join([
-            f"Section: {doc.metadata.get('section', 'Unknown')}\n{doc.page_content}"
+            f"Section: {doc.metadata.get('section', 'Unknown')}\n{re.sub(r' +', ' ', doc.page_content)}"
             for doc in source_docs
         ])
         
