@@ -1,0 +1,60 @@
+# AI Market Analyst Agent - Dependencies
+# Compatible with LangChain 1.0.3 and Python 3.9+
+
+# ===========================
+# Core LangChain Packages
+# ===========================
+langchain>=1.0.3,<1.1.0
+langchain-core
+langchain-community>=0.3.0,<0.4.0
+langgraph>=0.2.0,<0.3.0
+
+# ===========================
+# LLM Integrations
+# ===========================
+langchain-google-genai>=2.0.0
+langchain-openai>=0.2.0
+
+# ===========================
+# Vector Store & Embeddings
+# ===========================
+pinecone>=5.0.0,<6.0.0
+langchain-pinecone>=0.2.0
+langchain-text-splitters>=0.3.0
+langchain-huggingface>=0.1.0  # Modern HuggingFace embeddings (replaces deprecated langchain_community.embeddings)
+sentence-transformers
+torch  # Required for sentence-transformers
+
+# ===========================
+# API Framework
+# ===========================
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+python-multipart>=0.0.9  # Required for file uploads
+
+# ===========================
+# Data Validation
+# ===========================
+pydantic>=2.0.0,<3.0.0  # LangChain 1.0.3 requires Pydantic 2
+
+# ===========================
+# Utilities
+# ===========================
+python-dotenv>=1.0.0
+tiktoken>=0.8.0  # For token counting with OpenAI models
+
+# ===========================
+# Google AI (Gemini)
+# ===========================
+google-generativeai>=0.8.0
+
+# ===========================
+# Optional: Development Tools
+# ===========================
+# Uncomment these for development:
+# pytest>=8.0.0
+# pytest-asyncio>=0.24.0
+# black>=24.0.0
+# ruff>=0.7.0
+# mypy>=1.13.0
+
