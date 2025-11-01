@@ -546,10 +546,120 @@ Clean input = better extraction.
 
 ### Prerequisites
 
-- Python 3.9+
-- Node.js 16+
+- Python 3.9+ (for local development)
+- Node.js 16+ (for frontend development)
+- Docker & Docker Compose (for containerized deployment)
 - Google Gemini API key
 - Pinecone API key
+
+---
+
+## 🐳 Docker Deployment (Recommended)
+
+The fastest way to run the application is using Docker. This ensures consistent environments across development, staging, and production.
+
+### Quick Start with Docker
+
+1. **Clone the repository**
+```bash
+git clone <your-repo-url>
+cd Market_Analyst_Agent
+```
+
+2. **Create environment file**
+```bash
+cp .env.example .env
+# Edit .env and add your API keys
+```
+
+3. **Build and run with Docker Compose**
+```bash
+docker-compose up --build
+```
+
+The API will be available at `http://localhost:8000`
+
+### Docker Commands
+
+**Build the image:**
+```bash
+docker build -t market-analyst-agent .
+```
+
+**Run the container:**
+```bash
+docker run -d \
+  --name market-analyst-backend \
+  -p 8000:8000 \
+  --env-file .env \
+  -v ./data:/app/data:ro \
+  market-analyst-agent
+```
+
+**View logs:**
+```bash
+docker logs -f market-analyst-backend
+```
+
+**Stop the container:**
+```bash
+docker stop market-analyst-backend
+```
+
+**Remove the container:**
+```bash
+docker rm market-analyst-backend
+```
+
+### Docker Compose Commands
+
+**Start services:**
+```bash
+docker-compose up -d
+```
+
+**View logs:**
+```bash
+docker-compose logs -f backend
+```
+
+**Stop services:**
+```bash
+docker-compose down
+```
+
+**Rebuild and restart:**
+```bash
+docker-compose up --build -d
+```
+
+**Check service health:**
+```bash
+docker-compose ps
+curl http://localhost:8000/api/health
+```
+
+### Docker Image Details
+
+**Base Image:** `python:3.11-slim` (optimized for size)
+
+**Multi-stage Build:**
+- Stage 1: Base Python environment
+- Stage 2: Install dependencies
+- Stage 3: Copy application code
+
+**Security Features:**
+- Runs as non-root user (`appuser`)
+- Minimal base image (reduced attack surface)
+- No unnecessary packages
+
+**Image Size:** ~800MB (includes all dependencies)
+
+**Port:** 8000 (configurable via `docker-compose.yml`)
+
+---
+
+## 📦 Local Development Setup
 
 ### Backend Setup
 
