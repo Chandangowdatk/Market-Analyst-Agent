@@ -544,13 +544,16 @@ Clean input = better extraction.
 
 ## 🚀 Quick Start
 
+There are **two ways** to run the Market Analyst Agent system:
+
+1. **🐳 Docker Deployment** (Recommended) - Fast, consistent, production-ready
+2. **📦 Local Development Setup** - For development and customization
+
 ### Prerequisites
 
-- Python 3.9+ (for local development)
-- Node.js 16+ (for frontend development)
-- Docker & Docker Compose (for containerized deployment)
-- Google Gemini API key
-- Pinecone API key
+- **For Docker**: Docker & Docker Compose installed
+- **For Local**: Python 3.9+, Node.js 16+
+- **Required**: Google Gemini API key, Pinecone API key
 
 ---
 
