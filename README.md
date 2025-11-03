@@ -10,7 +10,7 @@ A full-stack AI-powered market research analysis system built with LangChain, Fa
   - **Extract Tool**: Export structured data in JSON format
   
 - **📄 RAG Pipeline**: Upload documents → Process & Chunk → Embed → Store in Pinecone
-- **🎨 Minimal UI**: Clean, Gemini-inspired dark interface
+- **🎨 Minimal UI**: Clean, interface
 - **⚡ Real-time Processing**: Fast document ingestion and query responses
 - **🔍 Semantic Search**: Advanced vector similarity search with HuggingFace embeddings
 
